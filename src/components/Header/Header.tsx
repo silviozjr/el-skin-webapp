@@ -1,6 +1,4 @@
 import './Header.css';
-import iconeSacola from './assets/sacola.png'
-import iconeLupa from './assets/lupa.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCartShopping, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';

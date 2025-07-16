@@ -84,7 +84,7 @@ export default function Carousel() {
           </button>
           
           <div className={styles.carouselText}>
-            {items[idxCarousel].texts.map( (item, idx) => {
+            {items[idxCarousel].texts.map( item => {
               switch (item.type) {
                 case "title":
                   return (<h1 className={styles.carouselTitle}>{item.text}</h1>)
