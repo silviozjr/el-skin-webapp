@@ -3,6 +3,7 @@ import Header from "./components/Header/Header";
 import Home from "./pages/Home/Home";
 import Footer from "./components/Footer/Footer";
 import Sobre from "./pages/Sobre/Sobre";
+import NotFound from "./pages/NotFound/NotFound";
 
 export default function AppRouter() {
   return (
@@ -11,7 +12,7 @@ export default function AppRouter() {
       <Routes>
         <Route path="/" element={<Home/>}/>
         <Route path="/about" element={<Sobre/>}/>
-        {/* <Route path="*" element={<NotFound/>}/> */}
+        <Route path="*" element={<NotFound/>}/>
       </Routes>
       <Footer/>
     </Router>
