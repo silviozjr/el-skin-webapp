@@ -26,7 +26,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   };
 
   return (
-    <button
+    <a
       className="product-card"
       onClick={() => onProductClick(product.id)}>
       <div className="product-image">
@@ -43,7 +43,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         <div className="product-tags">
           {product.tags.map((tag, idx) => (
             <span 
-              key={`${product.id}-tag`}
+              key={`${product.id}-tag--${idx}`}
               className={`product-tag product-tag--${idx}`}
             >
               {tag}
@@ -64,7 +64,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
           </button>
         </div>
       </div>
-    </button>
+    </a>
   )
 }
 

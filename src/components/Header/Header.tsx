@@ -1,19 +1,19 @@
 import './Header.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCartShopping, faSearch } from '@fortawesome/free-solid-svg-icons';
-import { useState } from 'react';
+import { useSearchContext } from '../../contexts/SearchContext';
 
 const opcoesMenu = ['Categorias', 'Tipo de pele', 'Necessidade', 'Ingredientes'];
 
 export default function Header() {
-  const [textoBusca, setTextoBusca] = useState('valor inicial do texto');
+  const { search, setSearch } = useSearchContext();
   
   function handleOnChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setTextoBusca(e.target.value);
+    setSearch(e.target.value);
   }
 
-  function onClickSearch(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void {
-    console.log(`Você pesquisou por: ${textoBusca}`);
+  function onClickSearch(): void {
+    console.log(`Você pesquisou por: ${search}`);
   }
 
   return (
