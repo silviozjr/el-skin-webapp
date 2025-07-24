@@ -17,9 +17,9 @@ const CartModal: React.FC<CartModalProps> = ({
   isOpen,
   onClose,
 }) => {
-  if (!isOpen) return null;
-
   const { items, updateQuantity, removeItem, getTotalPrice } = useCartContext();
+
+  if (!isOpen) return null;
 
   const handleBackdropClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
