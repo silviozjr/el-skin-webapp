@@ -4,11 +4,13 @@ import { faCartShopping, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { useSearchContext } from '../../contexts/SearchContext';
 import { useState } from 'react';
 import CartModal from '../CartModal/CartModal';
+import { useCartContext } from '../../contexts/CartContext';
 
 const opcoesMenu = ['Categorias', 'Tipo de pele', 'Necessidade', 'Ingredientes'];
 
 export default function Header() {
   const { search, setSearch } = useSearchContext();
+  const { getTotalItems } = useCartContext();
   const [isCartModalOpen, setIsCartModalOpen] = useState(false);
 
   function handleOnChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -46,6 +48,9 @@ export default function Header() {
         <div className='headerSacola'>
           <button className='cart-button' onClick={handleClickCart}>
             <FontAwesomeIcon icon={faCartShopping} />
+            {getTotalItems() > 0 &&
+              <span className='cart-quantity'>{getTotalItems()}</span>
+            }
           </button>
         </div>
       </div>
