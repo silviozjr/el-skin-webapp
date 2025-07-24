@@ -1,14 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import './ProductGrid.css';
 import ProductCard, { IProduto } from "../ProductCard/ProductCard";
 import axios from "axios";
 import { useSearchContext } from "../../contexts/SearchContext";
+import { useCartContext } from "../../contexts/CartContext";
 
 
 
 function ProductGrid() {
 
   const { search } = useSearchContext();
+  const { addItem } = useCartContext();
   const [produtos, setProdutos] = useState<IProduto[]>([])
   const [produtosFiltrados, setProdutosFiltrados] = useState<IProduto[]>([])
 
@@ -16,10 +18,18 @@ function ProductGrid() {
     console.log(`Produto clicado: ${productId}`);
   };
 
-  const handleBuyClick = (productId: string, event: React.MouseEvent) => {
+  const handleBuyClick = useCallback((productId: string, event: React.MouseEvent) => {
     event.stopPropagation();
     console.log(`Comprar produto: ${productId}`);
-  };
+    const produtoComprado = produtos.find(product => product.id === productId);
+
+    if(!produtoComprado) {
+      console.error(`Produto com ID ${productId} não encontrado.`);
+      return;
+    }
+
+    addItem(produtoComprado);
+  }, [produtos, addItem]);
 
 
   useEffect(() => {

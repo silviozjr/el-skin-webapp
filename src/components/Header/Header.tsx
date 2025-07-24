@@ -2,7 +2,6 @@ import './Header.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCartShopping, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { useSearchContext } from '../../contexts/SearchContext';
-import { useCartContext } from '../../contexts/CartContext';
 import { useState } from 'react';
 import CartModal from '../CartModal/CartModal';
 
@@ -10,7 +9,6 @@ const opcoesMenu = ['Categorias', 'Tipo de pele', 'Necessidade', 'Ingredientes']
 
 export default function Header() {
   const { search, setSearch } = useSearchContext();
-  const { items } = useCartContext();
   const [isCartModalOpen, setIsCartModalOpen] = useState(false);
 
   function handleOnChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -71,7 +69,6 @@ export default function Header() {
       <CartModal
         isOpen={isCartModalOpen}
         onClose={handleCloseCart}
-        items={items}
       />
 
     </header>
