@@ -1,6 +1,8 @@
-import { useState, useCallback } from 'react';
+import { useCallback, useReducer } from 'react';
+import { addProduto, limparCarrinho, removeProduto, updateQuantidade } from '../reducers/actions/cartActions';
+import { cartReducer } from '../reducers/cartReducer';
 
-interface ICartItem {
+export interface ICartItem {
   id: string;
   name: string;
   price: number;
@@ -18,44 +20,29 @@ export interface UseCartReturn {
   getTotalPrice: () => number;
 }
 
+
+
 export const useCart = (): UseCartReturn => {
-  const [items, setItems] = useState<ICartItem[]>([]);
+  const [items, dispatch] = useReducer(cartReducer, [] as ICartItem[]);
 
   const addItem = useCallback((newItem: Omit<ICartItem, 'quantity'>) => {
-    setItems(currentItems => {
-      const existingItem = currentItems.find(item => item.id === newItem.id);
-      
-      if (existingItem) {
-        return currentItems.map(item =>
-          item.id === newItem.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        );
-      }
-      
-      return [...currentItems, { ...newItem, quantity: 1 }];
-    });
+    dispatch(addProduto(newItem as ICartItem));
   }, []);
 
   const removeItem = useCallback((id: string) => {
-    setItems(currentItems => currentItems.filter(item => item.id !== id));
+    dispatch(removeProduto(id));
   }, []);
 
   const updateQuantity = useCallback((id: string, quantity: number) => {
     if (quantity <= 0) {
-      removeItem(id);
-      return;
+      dispatch(removeProduto(id));
     }
     
-    setItems(currentItems =>
-      currentItems.map(item =>
-        item.id === id ? { ...item, quantity } : item
-      )
-    );
-  }, [removeItem]);
+    dispatch(updateQuantidade(id, quantity));
+  }, []);
 
   const clearCart = useCallback(() => {
-    setItems([]);
+    dispatch(limparCarrinho());
   }, []);
 
   const getTotalItems = useCallback(() => {
