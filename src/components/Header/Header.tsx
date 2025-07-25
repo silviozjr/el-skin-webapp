@@ -1,19 +1,32 @@
 import './Header.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCartShopping, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { useSearchContext } from '../../contexts/SearchContext';
 import { useState } from 'react';
+import CartModal from '../CartModal/CartModal';
+import { useCartContext } from '../../contexts/CartContext';
 
 const opcoesMenu = ['Categorias', 'Tipo de pele', 'Necessidade', 'Ingredientes'];
 
 export default function Header() {
-  const [textoBusca, setTextoBusca] = useState('valor inicial do texto');
-  
+  const { search, setSearch } = useSearchContext();
+  const { getTotalItems } = useCartContext();
+  const [isCartModalOpen, setIsCartModalOpen] = useState(false);
+
   function handleOnChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setTextoBusca(e.target.value);
+    setSearch(e.target.value);
   }
 
-  function onClickSearch(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void {
-    console.log(`Você pesquisou por: ${textoBusca}`);
+  function onClickSearch(): void {
+    console.log(`Você pesquisou por: ${search}`);
+  }
+
+  function handleClickCart() {
+    setIsCartModalOpen(true)
+  }
+
+  function handleCloseCart() {
+    setIsCartModalOpen(false)
   }
 
   return (
@@ -22,27 +35,30 @@ export default function Header() {
       <div className='headerLogoPesquisa'>
         <div className='headerLogo'>AL SKIN</div>
         <div className='headerPesquisa'>
-          <input 
+          <input
             type='text'
             className='headerInputPesquisa'
             placeholder='O que você está procurando?'
             onChange={handleOnChange}
           />
           <button className="search-button" onClick={onClickSearch}>
-            <FontAwesomeIcon icon={faSearch}/>
+            <FontAwesomeIcon icon={faSearch} />
           </button>
         </div>
         <div className='headerSacola'>
-          <button className='cart-button'>
+          <button className='cart-button' onClick={handleClickCart}>
             <FontAwesomeIcon icon={faCartShopping} />
+            {getTotalItems() > 0 &&
+              <span className='cart-quantity'>{getTotalItems()}</span>
+            }
           </button>
         </div>
       </div>
 
       <nav className='headerMenu'>
         <ul className='headerMenuOpcoes'>
-          {opcoesMenu.map( (menuItem, i) => (
-            <li 
+          {opcoesMenu.map((menuItem, i) => (
+            <li
               key={`${menuItem}-${i}`}
               className='headerMenuOpcao'
             >
@@ -54,7 +70,12 @@ export default function Header() {
           Kits até 50% OFF
         </div>
       </nav>
-      
+
+      <CartModal
+        isOpen={isCartModalOpen}
+        onClose={handleCloseCart}
+      />
+
     </header>
   )
 }

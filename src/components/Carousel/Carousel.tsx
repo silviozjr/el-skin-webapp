@@ -1,26 +1,24 @@
 import { useEffect, useState } from "react"
-import Img1 from '../../assets/img1.png'
-import Img2 from '../../assets/img2.png'
-import Img3 from '../../assets/img3.png'
 import styles from './Carousel.module.css'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons"
-
-interface ITextoCarousel {
-  text: string;
-  type: 'title' | 'subtitle' | 'description' | 'discount' | 'coupon';
-}
+import axios from "axios"
 
 interface ICarouselItem {
-  texts: ITextoCarousel[];
+  title: string;
+  subtitle: string;
+  description?: string;
+  coupon?: string;
+  discount?: string;
   backgroundImage: string;
 }
 
 export default function Carousel() {
 
   const [idxCarousel, setIdxCarousel] = useState(0);
+  const [items, setItems] = useState<ICarouselItem[]>([]);
 
-    function previousItem() {
+  function previousItem() {
     setIdxCarousel((prevIdx) => (prevIdx === 0 ? items.length - 1 : prevIdx - 1));
   }
 
@@ -31,47 +29,29 @@ export default function Carousel() {
   useEffect(() => {
     const timer = setInterval(() => {
       setIdxCarousel(prevIdxItemAtual => {
-        return (prevIdxItemAtual + 1) % items.length;
+        return items.length > 0 ? (prevIdxItemAtual + 1) % items.length : 0;
       });
     }, 3000);
 
     return () => {
       clearInterval(timer);
     };
+  }, [items]);
+
+  useEffect(() => {
+    async function buscarItensCarousel() {
+      axios.get('http://localhost:3001/carousel')
+        .then(response => setItems(response.data));
+    }
+
+    buscarItensCarousel();
   }, []);
 
-  const items: ICarouselItem[] = [
-    {
-      texts: [
-        { text: 'confira nossa linha', type: 'subtitle', },
-        { text: 'corporal', type: 'title', },
-        { text: 'com benefícios além da hidratação', type: 'description', },
-      ],
-      backgroundImage: Img1,
-    },
-    {
-      texts: [
-        { text: 'toda linha', type: 'subtitle', },
-        { text: 'anti-age', type: 'title', },
-        { text: 'com 15% OFF', type: 'discount', },
-        { text: 'ANTIAGE15', type: 'coupon', },
-      ],
-      backgroundImage: Img2,
-    },
-    {
-      texts: [
-        { text: 'kits incríveis', type: 'title', },
-        { text: 'até 50% OFF', type: 'discount', },
-        { text: 'QUEROTODOS', type: 'coupon', },
-      ],
-      backgroundImage: Img3,
-    },
-  ]
-
   return (
+    items.length === 0 ? <></> : (
     <section
       className={styles.carouselSection}
-      style={{ 
+      style={{
         backgroundImage: `url(${items[idxCarousel].backgroundImage})`,
       }}
     >
@@ -82,30 +62,19 @@ export default function Carousel() {
           <button className={styles.carouselNavButton} aria-label="Voltar" onClick={previousItem}>
             <FontAwesomeIcon width="60" height="24" icon={faAngleLeft} style={{ color: 'white' }} />
           </button>
-          
+
           <div className={styles.carouselText}>
-            {items[idxCarousel].texts.map( item => {
-              switch (item.type) {
-                case "title":
-                  return (<h1 className={styles.carouselTitle}>{item.text}</h1>)
-                case "subtitle":
-                  return (<span className={styles.carouselSubtitle}>{item.text}</span>)
-                case "description":
-                  return (<p className={styles.carouselDescription}>{item.text}</p>)
-                case "discount":
-                  return (<span className={styles.carouselDiscount}>{item.text}</span>)
-                case "coupon":
-                  return (
-                    <div className={styles.carouselCouponContainer}>
-                      <p className={styles.carouselCouponLabel}>use o cupom</p>
-                      <span className={styles.carouselCoupon}>{item.text}</span>
-                    </div>
-                  )
-                default:
-                  return <div>{item.text}</div>
-              }
-            })}
-            <button 
+            {items[idxCarousel].subtitle && <span className={styles.carouselSubtitle}>{items[idxCarousel].subtitle}</span>}
+            {items[idxCarousel].title && <h1 className={styles.carouselTitle}>{items[idxCarousel].title}</h1>}
+            {items[idxCarousel].description && <p className={styles.carouselDescription}>{items[idxCarousel].description}</p>}
+            {items[idxCarousel].discount && <span className={styles.carouselDiscount}>{items[idxCarousel].discount}</span>}
+            {items[idxCarousel].coupon && (
+              <div className={styles.carouselCouponContainer}>
+                <p className={styles.carouselCouponLabel}>use o cupom</p>
+                <span className={styles.carouselCoupon}>{items[idxCarousel].coupon}</span>
+              </div>
+            )}
+            <button
               className={styles.carouselCtaButton}>
               comprar agora
               <FontAwesomeIcon icon={faAngleRight} />
@@ -118,5 +87,6 @@ export default function Carousel() {
         </div>
       </div>
     </section>
+    )
   )
 }

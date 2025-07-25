@@ -3,14 +3,11 @@ import "./ProductCard.css";
 
 export interface IProduto {
   id: string;
-  nome: string;
-  descricao: string;
-  preco: number;
-  imagem: string;
-  tags: Array<{
-    label: string;
-    tipo: 'protection' | 'face';
-  }>;
+  name: string;
+  description: string;
+  price: number;
+  image: string;
+  tags: string[];
 }
 
 interface ProductCardProps {
@@ -29,34 +26,34 @@ const ProductCard: React.FC<ProductCardProps> = ({
   };
 
   return (
-    <button
+    <a
       className="product-card"
       onClick={() => onProductClick(product.id)}>
       <div className="product-image">
         <img 
-          src={product.imagem} 
-          alt={product.nome}
+          src={product.image} 
+          alt={product.name}
         />
       </div>
       
       <div className="product-info">
-        <h3 className="product-name">{product.nome}</h3>
-        <p className="product-description">{product.descricao}</p>
+        <h3 className="product-name">{product.name}</h3>
+        <p className="product-description">{product.description}</p>
         
         <div className="product-tags">
-          {product.tags.map((tag) => (
+          {product.tags.map((tag, idx) => (
             <span 
-              key={`${product.id}-${tag.label}-${tag.tipo}`}
-              className={`product-tag product-tag--${tag.tipo}`}
+              key={`${product.id}-tag--${idx}`}
+              className={`product-tag product-tag--${idx}`}
             >
-              {tag.label}
+              {tag}
             </span>
           ))}
         </div>
         
         <div className="product-footer">
           <span className="product-price">
-            {formatPrice(product.preco)}
+            {formatPrice(product.price)}
           </span>
           <button 
             className="product-buy-button"
@@ -67,7 +64,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
           </button>
         </div>
       </div>
-    </button>
+    </a>
   )
 }
 

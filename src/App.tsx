@@ -1,12 +1,16 @@
 import React from 'react';
 import './App.css';
 import AppRouter from './routes';
+import { SearchProvider } from './contexts/SearchContext';
+import { CartProvider } from './contexts/CartContext';
 
 function App() {
   return (
-    <div className="App">
-      <AppRouter />
-    </div>
+    <CartProvider>
+      <SearchProvider>
+        <AppRouter />
+      </SearchProvider>
+    </CartProvider>
   );
 }
 
