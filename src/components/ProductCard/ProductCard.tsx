@@ -27,6 +27,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
   return (
     <a
+      data-testid="product-card"
       className="product-card"
       onClick={() => onProductClick(product.id)}>
       <div className="product-image">
@@ -56,6 +57,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
             {formatPrice(product.price)}
           </span>
           <button 
+            data-testid="buy-button"
             className="product-buy-button"
             onClick={(e) => onBuyClick(product.id, e)}
             type="button"

@@ -36,17 +36,24 @@ export default function Header() {
         <div className='headerLogo'>AL SKIN</div>
         <div className='headerPesquisa'>
           <input
+            data-testid='search-input'
             type='text'
             className='headerInputPesquisa'
             placeholder='O que você está procurando?'
             onChange={handleOnChange}
           />
-          <button className="search-button" onClick={onClickSearch}>
+          <button 
+            data-testid="search-button"
+            className="search-button" 
+            onClick={onClickSearch}>
             <FontAwesomeIcon icon={faSearch} />
           </button>
         </div>
         <div className='headerSacola'>
-          <button className='cart-button' onClick={handleClickCart}>
+          <button 
+            data-testid='cart-button'
+            className='cart-button' 
+            onClick={handleClickCart}>
             <FontAwesomeIcon icon={faCartShopping} />
             {getTotalItems() > 0 &&
               <span className='cart-quantity'>{getTotalItems()}</span>
