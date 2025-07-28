@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react"
-import styles from './Carousel.module.css'
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons"
-import axios from "axios"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { useEffect, useState } from "react"
+import { carouselService } from "../../services/carouselService"
+import styles from './Carousel.module.css'
 
 interface ICarouselItem {
   title: string;
@@ -40,8 +40,8 @@ export default function Carousel() {
 
   useEffect(() => {
     async function buscarItensCarousel() {
-      axios.get('http://localhost:3001/carousel')
-        .then(response => setItems(response.data));
+      const newItems = await carouselService.getCarouselItems();
+      setItems(newItems);
     }
 
     buscarItensCarousel();

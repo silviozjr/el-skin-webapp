@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useState } from "react";
-import './ProductGrid.css';
-import ProductCard, { IProduto } from "../ProductCard/ProductCard";
-import axios from "axios";
-import { useSearchContext } from "../../contexts/SearchContext";
 import { useCartContext } from "../../contexts/CartContext";
+import { useSearchContext } from "../../contexts/SearchContext";
+import { productService } from "../../services/productService";
+import ProductCard, { IProduto } from "../ProductCard/ProductCard";
+import './ProductGrid.css';
 
 
 
@@ -34,8 +34,8 @@ function ProductGrid() {
 
   useEffect(() => {
     async function buscarProdutos() {
-      axios.get('http://localhost:3001/products')
-        .then(response => setProdutos(response.data));
+      const listaProdutos = await productService.getProducts();
+      setProdutos(listaProdutos);
     }
 
     buscarProdutos();
