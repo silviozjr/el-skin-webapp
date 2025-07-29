@@ -109,8 +109,9 @@ const Footer: React.FC = () => {
       <div className="footer-social">
         <div className="footer-container">
           <div className="social-icons">
-            {socialLinks.map((social) => (
+            {socialLinks.map((social, i) => (
               <button
+                data-testid={`footer-button-${i}`}
                 key={social.label}
                 className="social-icon"
                 onClick={() => handleSocialClick(social)}

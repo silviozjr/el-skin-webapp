@@ -56,10 +56,11 @@ export default function Carousel() {
       }}
     >
       <div
+        data-testid="carousel-container"
         className={styles.carouselContainer}
       >
         <div className={styles.carouselContent}>
-          <button className={styles.carouselNavButton} aria-label="Voltar" onClick={previousItem}>
+          <button data-testid="button-previous" className={styles.carouselNavButton} aria-label="Voltar" onClick={previousItem}>
             <FontAwesomeIcon width="60" height="24" icon={faAngleLeft} style={{ color: 'white' }} />
           </button>
 
@@ -81,7 +82,7 @@ export default function Carousel() {
             </button>
           </div>
 
-          <button className={styles.carouselNavButton} aria-label="Próximo" onClick={nextItem}>
+          <button data-testid="button-next" className={styles.carouselNavButton} aria-label="Próximo" onClick={nextItem}>
             <FontAwesomeIcon width="60" height="24" icon={faAngleRight} style={{ color: 'white' }} />
           </button>
         </div>
