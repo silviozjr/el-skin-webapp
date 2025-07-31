@@ -3,7 +3,7 @@ import { useCartContext } from "../../contexts/CartContext";
 import { useSearchContext } from "../../contexts/SearchContext";
 import { productService } from "../../services/productService";
 import ProductCard, { IProduto } from "../ProductCard/ProductCard";
-import './ProductGrid.css';
+import styled, { keyframes } from "styled-components";
 
 
 
@@ -51,11 +51,11 @@ function ProductGrid() {
   }, [produtos, search]);
 
   return (
-    <section className="product-grid-section">
-      <div className="product-grid-container">
-        <h2 className="product-grid-title">nossos queridinhos estão aqui</h2>
+    <ProductGridSection>
+      <ProductGridContainer>
+        <ProductGridTitle>nossos queridinhos estão aqui</ProductGridTitle>
 
-        <div className="product-grid">
+        <ProductCardsContainer>
           {produtosFiltrados.map((produto) => (
             <ProductCard 
               key={produto.id} 
@@ -64,10 +64,57 @@ function ProductGrid() {
               onBuyClick={handleBuyClick}
             />
           ))}
-        </div>
-      </div>
-    </section>
+        </ProductCardsContainer>
+      </ProductGridContainer>
+    </ProductGridSection>
   )
 }
+
+const ProductGridSection = styled.section`
+  padding: 60px 20px;
+  background-color: #ffffff;
+`;
+
+const ProductGridContainer = styled.div`
+  max-width: 1200px;
+  margin: 0 auto;
+`;
+
+const ProductGridTitle = styled.h2`
+  text-align: center;
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 40px;
+  font-family: 'Arial', sans-serif;
+`;
+
+const fadeInUp = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+
+const ProductCardsContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+  justify-items: center;
+
+  
+  &:nth-child(1) { animation: ${fadeInUp} 0.5s ease-out 0.1s forwards; }
+  &:nth-child(2) { animation: ${fadeInUp} 0.5s ease-out 0.2s forwards; }
+  &:nth-child(3) { animation: ${fadeInUp} 0.5s ease-out 0.3s forwards; }
+  &:nth-child(4) { animation: ${fadeInUp} 0.5s ease-out 0.4s forwards; }
+  &:nth-child(5) { animation: ${fadeInUp} 0.5s ease-out 0.5s forwards; }
+  &:nth-child(6) { animation: ${fadeInUp} 0.5s ease-out 0.6s forwards; }
+  &:nth-child(7) { animation: ${fadeInUp} 0.5s ease-out 0.7s forwards; }
+  &:nth-child(8) { animation: ${fadeInUp} 0.5s ease-out 0.8s forwards; }
+`;
 
 export default ProductGrid;
