@@ -1,5 +1,4 @@
 import React from 'react';
-import './App.css';
 import AppRouter from './routes';
 import { SearchProvider } from './contexts/SearchContext';
 import { CartProvider } from './contexts/CartContext';
