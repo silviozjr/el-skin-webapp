@@ -5,12 +5,12 @@ import Header from "./Header";
 const mockSearchTerm = '';
 const mockSetSearchTerm = jest.fn();
 
-jest.mock('../../contexts/SearchContext', () => ({
-  useSearchContext: () => ({
-    search: mockSearchTerm,
-    setSearch: mockSetSearchTerm,
-  }),
-}));
+jest.mock('../../hooks/useSearch', () => ({
+  useSearch: () => ({
+    term: mockSearchTerm,
+    setTerm: mockSetSearchTerm,
+  })
+}))
 
 const mockGetTotalItems = jest.fn();
 

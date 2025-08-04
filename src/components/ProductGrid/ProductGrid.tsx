@@ -1,15 +1,15 @@
 import React, { useCallback, useEffect, useState } from "react";
+import styled, { keyframes } from "styled-components";
 import { useCartContext } from "../../contexts/CartContext";
-import { useSearchContext } from "../../contexts/SearchContext";
+import { useSearch } from "../../hooks/useSearch";
 import { productService } from "../../services/productService";
 import ProductCard, { IProduto } from "../ProductCard/ProductCard";
-import styled, { keyframes } from "styled-components";
 
 
 
 function ProductGrid() {
 
-  const { search } = useSearchContext();
+  const { term } = useSearch();
   const { addItem } = useCartContext();
   const [produtos, setProdutos] = useState<IProduto[]>([])
   const [produtosFiltrados, setProdutosFiltrados] = useState<IProduto[]>([])
@@ -42,13 +42,13 @@ function ProductGrid() {
   }, []);
 
   useEffect(() => {
-    const textoBusca = search.toLowerCase();
+    const textoBusca = term.toLowerCase();
     setProdutosFiltrados(
       textoBusca && textoBusca.trim() !== "" ?
       produtos.filter(prod => prod.name.toLowerCase().includes(textoBusca) || prod.description.toLowerCase().includes(textoBusca))
       : [...produtos]
     )
-  }, [produtos, search]);
+  }, [produtos, term]);
 
   return (
     <ProductGridSection>

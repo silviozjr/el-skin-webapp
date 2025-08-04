@@ -1,24 +1,24 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCartShopping, faSearch } from '@fortawesome/free-solid-svg-icons';
-import { useSearchContext } from '../../contexts/SearchContext';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
-import CartModal from '../CartModal/CartModal';
-import { useCartContext } from '../../contexts/CartContext';
 import styled from 'styled-components';
+import { useCartContext } from '../../contexts/CartContext';
+import { useSearch } from '../../hooks/useSearch';
+import CartModal from '../CartModal/CartModal';
 
 const opcoesMenu = ['Categorias', 'Tipo de pele', 'Necessidade', 'Ingredientes'];
 
 export default function Header() {
-  const { search, setSearch } = useSearchContext();
+  const { term, setTerm } = useSearch();
   const { getTotalItems } = useCartContext();
   const [isCartModalOpen, setIsCartModalOpen] = useState(false);
 
   function handleOnChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setSearch(e.target.value);
+    setTerm(e.target.value);
   }
 
   function onClickSearch(): void {
-    console.log(`Você pesquisou por: ${search}`);
+    console.log(`Você pesquisou por: ${term}`);
   }
 
   function handleClickCart() {

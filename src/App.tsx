@@ -1,21 +1,21 @@
-import React from 'react';
-import AppRouter from './routes';
-import { SearchProvider } from './contexts/SearchContext';
-import { CartProvider } from './contexts/CartContext';
-import GlobalStyles from './components/GlobalStyles/GlobalStyles';
+import { Provider } from 'react-redux';
 import { ThemeProvider } from 'styled-components';
+import GlobalStyles from './components/GlobalStyles/GlobalStyles';
+import { CartProvider } from './contexts/CartContext';
+import AppRouter from './routes';
+import { store } from './store';
 import { theme } from './theme';
 
 function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <CartProvider>
-        <SearchProvider>
+    <Provider store={store}>
+      <ThemeProvider theme={theme}>
+        <CartProvider>
           <GlobalStyles />
           <AppRouter />
-        </SearchProvider>
-      </CartProvider>
-    </ThemeProvider>
+        </CartProvider>
+      </ThemeProvider>
+    </Provider>
   );
 }
 
