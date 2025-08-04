@@ -173,7 +173,7 @@ const CarouselText = styled.div`
 const CarouselSubtitle = styled.span`
   display: block;
   font-size: 16px;
-  color: #8B4A8B;
+  color: ${ props => props.theme.colors.primary };
   margin-bottom: 8px;
   font-weight: 400;
   letter-spacing: 0.5px;
@@ -185,7 +185,7 @@ const CarouselSubtitle = styled.span`
 const CarouselTitle = styled.h1`
   font-size: 64px;
   font-weight: 700;
-  color: #8B4A8B;
+  color: ${ props => props.theme.colors.primary };
   margin: 0;
   margin-bottom: 16px;
   line-height: 1.1;
@@ -217,7 +217,7 @@ const CarouselDiscount = styled.span`
 `;
 
 const CarouselCtaButton = styled.button`
-  background: linear-gradient(135deg, #8B4A8B 0%, #A855A8 100%);
+  background: ${ props => props.theme.colors.primaryGradient };
   color: white;
   border: none;
   padding: 16px 32px;
@@ -233,7 +233,7 @@ const CarouselCtaButton = styled.button`
   text-transform: lowercase;
   
   &:hover {
-    background: linear-gradient(135deg, #7A3E7A 0%, #9333EA 100%);
+    background: ${ props => props.theme.colors.primaryGradientHover };
     transform: translateY(-2px);
     box-shadow: 0 8px 24px rgba(139, 74, 139, 0.4);
   }
@@ -255,14 +255,14 @@ const CarouselCouponContainer = styled.div`
 
 const CarouselCouponLabel = styled.p`
   font-size: 18px;
-  color: #7A3E7A;
+  color: ${ props => props.theme.colors.secondary };
   margin-bottom: 0.5rem;
   line-height: 1.5;
   max-width: 400px;
 `;
 
 const CarouselCoupon = styled.span`
-  border: 1px dashed #7A3E7A;
+  border: 1px dashed ${ props => props.theme.colors.secondary };
   padding: 0.5rem 1rem;
-  color: #7A3E7A;
+  color: ${ props => props.theme.colors.secondary };
 `;

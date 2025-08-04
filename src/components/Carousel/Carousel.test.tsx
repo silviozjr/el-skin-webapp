@@ -1,5 +1,7 @@
 import { act, render, screen } from "@testing-library/react";
 import Carousel from "./Carousel";
+import { ThemeProvider } from "styled-components";
+import { theme } from "../../theme";
 
 const mockItems = [
   {
@@ -30,7 +32,11 @@ jest.mock('../../services/carouselService', () => ({
 const renderWithAct = async () => {
   let component;
   await act(async () => {
-    component = render(<Carousel />);
+    component = render(
+      <ThemeProvider theme={theme}>
+        <Carousel />
+      </ThemeProvider>
+    );
   });
   return component;
 };
@@ -42,20 +48,20 @@ test('Carousel deve ser renderizado', async () => {
 })
 
 test('Botões devem alterar conteúdo do Carousel', async () => {
-  await renderWithAct(); 
+  await renderWithAct();
 
   const botaoProximo: HTMLButtonElement = screen.getByTestId("button-next");
   const botaoAnterior: HTMLButtonElement = screen.getByTestId("button-previous");
-  
+
   expect(screen.queryByText(mockItems[0].title)).toBeInTheDocument();
   expect(screen.queryByText(mockItems[1].title)).not.toBeInTheDocument();
 
-  await act(async () => {botaoProximo.click()});
+  await act(async () => { botaoProximo.click() });
 
   expect(screen.queryByText(mockItems[0].title)).not.toBeInTheDocument();
   expect(screen.queryByText(mockItems[1].title)).toBeInTheDocument();
-  
-  await act(async () => {botaoAnterior.click()});
+
+  await act(async () => { botaoAnterior.click() });
 
   expect(screen.queryByText(mockItems[0].title)).toBeInTheDocument();
   expect(screen.queryByText(mockItems[1].title)).not.toBeInTheDocument();
