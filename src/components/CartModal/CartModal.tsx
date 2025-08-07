@@ -1,8 +1,8 @@
 import { faMinus, faPlus, faTimes, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
-import { useCartContext } from '../../contexts/CartContext';
 import styled from 'styled-components';
+import { useCart } from '../../hooks/useCart';
 
 interface CartModalProps {
   isOpen: boolean;
@@ -17,7 +17,7 @@ const CartModal: React.FC<CartModalProps> = ({
   isOpen,
   onClose,
 }) => {
-  const { items, updateQuantity, removeItem, getTotalPrice } = useCartContext();
+  const { items, updateQuantity, removeItem, totalPrice } = useCart();
 
   if (!isOpen) return null;
 
@@ -101,7 +101,7 @@ const CartModal: React.FC<CartModalProps> = ({
 
               <CartTotal>
                 <TotalLabel>Total</TotalLabel>
-                <TotalPrice>{formatPrice(getTotalPrice())}</TotalPrice>
+                <TotalPrice>{formatPrice(totalPrice)}</TotalPrice>
               </CartTotal>
 
               <FinalizeBtn

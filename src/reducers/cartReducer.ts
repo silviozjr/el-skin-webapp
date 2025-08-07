@@ -1,4 +1,4 @@
-import { ICartItem } from "../hooks/useCart";
+import { ICartItem } from "../store/slices/cartSlice";
 import { CartAction } from "./actions/cartActions";
 
 export const ADD_PRODUTO = "ADD_PRODUTO";

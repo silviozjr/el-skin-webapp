@@ -14,8 +14,8 @@ jest.mock('../../hooks/useSearch', () => ({
 
 const mockGetTotalItems = jest.fn();
 
-jest.mock('../../contexts/CartContext', () => ({
-  useCartContext: () => ({
+jest.mock('../../hooks/useCart', () => ({
+  useCart: () => ({
     getTotalItems: mockGetTotalItems,
     items: [],
   }),

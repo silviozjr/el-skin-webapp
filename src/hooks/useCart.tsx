@@ -1,15 +1,8 @@
-import { useCallback, useReducer } from 'react';
-import { addProduto, limparCarrinho, removeProduto, updateQuantidade } from '../reducers/actions/cartActions';
-import { cartReducer } from '../reducers/cartReducer';
-
-export interface ICartItem {
-  id: string;
-  name: string;
-  price: number;
-  quantity: number;
-  image: string;
-}
-
+import { useDispatch, useSelector } from 'react-redux';
+import { useMemo, useCallback } from 'react';
+import type { RootState, AppDispatch } from '../store';
+import { addItem, removeItem, updateQuantity, clearCart, ICartItem } from '../store/slices/cartSlice';
+ 
 export interface UseCartReturn {
   items: ICartItem[];
   addItem: (item: Omit<ICartItem, 'quantity'>) => void;
@@ -17,49 +10,44 @@ export interface UseCartReturn {
   updateQuantity: (id: string, quantity: number) => void;
   clearCart: () => void;
   getTotalItems: () => number;
-  getTotalPrice: () => number;
+  totalPrice: number;
 }
-
-
-
+ 
 export const useCart = (): UseCartReturn => {
-  const [items, dispatch] = useReducer(cartReducer, [] as ICartItem[]);
-
-  const addItem = useCallback((newItem: Omit<ICartItem, 'quantity'>) => {
-    dispatch(addProduto(newItem as ICartItem));
-  }, []);
-
-  const removeItem = useCallback((id: string) => {
-    dispatch(removeProduto(id));
-  }, []);
-
-  const updateQuantity = useCallback((id: string, quantity: number) => {
-    if (quantity <= 0) {
-      dispatch(removeProduto(id));
-    }
-    
-    dispatch(updateQuantidade(id, quantity));
-  }, []);
-
-  const clearCart = useCallback(() => {
-    dispatch(limparCarrinho());
-  }, []);
-
+  const dispatch = useDispatch<AppDispatch>();
+  const items = useSelector((state: RootState) => state.cart.items);
+ 
+  const handleAddItem = useCallback((item: Omit<ICartItem, 'quantity'>) => {
+    dispatch(addItem(item));
+  }, [dispatch]);
+ 
+  const handleRemoveItem = useCallback((id: string) => {
+    dispatch(removeItem({id}));
+  }, [dispatch]);
+ 
+  const handleUpdateQuantity = useCallback((id: string, quantity: number) => {
+    dispatch(updateQuantity({ id, quantity }));
+  }, [dispatch]);
+ 
+  const handleClearCart = useCallback(() => {
+    dispatch(clearCart());
+  }, [dispatch]);
+ 
   const getTotalItems = useCallback(() => {
     return items.reduce((total, item) => total + item.quantity, 0);
   }, [items]);
-
-  const getTotalPrice = useCallback(() => {
+ 
+  const totalPrice = useMemo(() => {
     return items.reduce((total, item) => total + (item.price * item.quantity), 0);
   }, [items]);
-
+ 
   return {
     items,
-    addItem,
-    removeItem,
-    updateQuantity,
-    clearCart,
+    addItem: handleAddItem,
+    removeItem: handleRemoveItem,
+    updateQuantity: handleUpdateQuantity,
+    clearCart: handleClearCart,
     getTotalItems,
-    getTotalPrice,
+    totalPrice
   };
 };

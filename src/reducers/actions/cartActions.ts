@@ -1,4 +1,4 @@
-import { ICartItem } from "../../hooks/useCart";
+import { ICartItem } from "../../store/slices/cartSlice";
 import { ADD_PRODUTO, LIMPAR_CARRINHO, REMOVE_PRODUTO, UPDATE_QUANTIDADE } from "../cartReducer";
 
 // Tipos

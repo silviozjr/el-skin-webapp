@@ -1,16 +1,16 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
-import { useCartContext } from "../../contexts/CartContext";
 import { useSearch } from "../../hooks/useSearch";
 import { productService } from "../../services/productService";
 import ProductCard, { IProduto } from "../ProductCard/ProductCard";
+import { useCart } from "../../hooks/useCart";
 
 
 
 function ProductGrid() {
 
   const { term } = useSearch();
-  const { addItem } = useCartContext();
+  const { addItem } = useCart();
   const [produtos, setProdutos] = useState<IProduto[]>([])
   const [produtosFiltrados, setProdutosFiltrados] = useState<IProduto[]>([])
 

@@ -39,8 +39,8 @@ jest.mock('../../hooks/useSearch', () => ({
   })
 }))
 
-jest.mock('../../contexts/CartContext', () => ({
-  useCartContext: () => ({
+jest.mock('../../hooks/useCart', () => ({
+  useCart: () => ({
     addItem: mockAddItem
   }),
 }));
