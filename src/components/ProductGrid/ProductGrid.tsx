@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { useSearch } from "../../hooks/useSearch";
-import { productService } from "../../services/productService";
 import ProductCard, { IProduto } from "../ProductCard/ProductCard";
 import { useCart } from "../../hooks/useCart";
+import { useProducts } from "../../hooks/useProducts";
 
 
 
@@ -11,17 +11,19 @@ function ProductGrid() {
 
   const { term } = useSearch();
   const { addItem } = useCart();
-  const [produtos, setProdutos] = useState<IProduto[]>([])
+  const { products, loadProducts, getProductById, filteredProducts } = useProducts();
+  console.log('Products: ', products);
   const [produtosFiltrados, setProdutosFiltrados] = useState<IProduto[]>([])
 
   const handleProductClick = (productId: string) => {
     console.log(`Produto clicado: ${productId}`);
+    console.log('getById:', getProductById(productId));
   };
 
   const handleBuyClick = useCallback((productId: string, event: React.MouseEvent) => {
     event.stopPropagation();
     console.log(`Comprar produto: ${productId}`);
-    const produtoComprado = produtos.find(product => product.id === productId);
+    const produtoComprado = products.find(product => product.id === productId);
 
     if(!produtoComprado) {
       console.error(`Produto com ID ${productId} não encontrado.`);
@@ -29,26 +31,20 @@ function ProductGrid() {
     }
 
     addItem(produtoComprado);
-  }, [produtos, addItem]);
-
-
+  }, [products, addItem]);
+  
   useEffect(() => {
-    async function buscarProdutos() {
-      const listaProdutos = await productService.getProducts();
-      setProdutos(listaProdutos);
+    if (products.length === 0) {
+      loadProducts();
     }
-
-    buscarProdutos();
-  }, []);
+  }, [products.length, loadProducts]);
 
   useEffect(() => {
     const textoBusca = term.toLowerCase();
     setProdutosFiltrados(
-      textoBusca && textoBusca.trim() !== "" ?
-      produtos.filter(prod => prod.name.toLowerCase().includes(textoBusca) || prod.description.toLowerCase().includes(textoBusca))
-      : [...produtos]
+      filteredProducts(textoBusca)
     )
-  }, [produtos, term]);
+  }, [term, filteredProducts]);
 
   return (
     <ProductGridSection>
