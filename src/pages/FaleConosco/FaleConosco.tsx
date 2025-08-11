@@ -6,9 +6,9 @@ export default function FaleConosco() {
   return (
     <FaleconoscoContainer>
       <FaleconoscoContainerTopo>
-        <FaleconoscoForm>
+        <FaleconoscoFormContainer>
           <FaleconoscoForm>
-            <h3>Fale conosco</h3>
+            <FaleconoscoSubtitulo>Fale conosco</FaleconoscoSubtitulo>
             <FaleconoscoInput 
               type="text"
               placeholder="Seu nome" />
@@ -23,18 +23,18 @@ export default function FaleConosco() {
               placeholder="Seu CPF" />
             <FaleconoscoCheckboxes>
               Categoria:<br />
-              <input id="duvidas" type="checkbox" />
-              <label htmlFor="duvidas">Dúvidas</label>
-              <input id="pedido" type="checkbox" />
-              <label htmlFor="pedido">Problema com pedido</label>
-              <input id="reclamacao" type="checkbox" />
-              <label htmlFor="reclamacao">Reclamação</label><br />
-              <input id="sugestao" type="checkbox" />
-              <label htmlFor="sugestao">Sugestão</label>
-              <input id="elogio" type="checkbox" />
-              <label htmlFor="elogio">Elogios</label>
-              <input id="outro" type="checkbox" />
-              <label htmlFor="outro">Outro</label><br />
+              <FaleconoscoCheckbox id="duvidas" type="checkbox" />
+              <FaleconoscoLabel htmlFor="duvidas">Dúvidas</FaleconoscoLabel>
+              <FaleconoscoCheckbox id="pedido" type="checkbox" />
+              <FaleconoscoLabel htmlFor="pedido">Problema com pedido</FaleconoscoLabel>
+              <FaleconoscoCheckbox id="reclamacao" type="checkbox" />
+              <FaleconoscoLabel htmlFor="reclamacao">Reclamação</FaleconoscoLabel><br />
+              <FaleconoscoCheckbox id="sugestao" type="checkbox" />
+              <FaleconoscoLabel htmlFor="sugestao">Sugestão</FaleconoscoLabel>
+              <FaleconoscoCheckbox id="elogio" type="checkbox" />
+              <FaleconoscoLabel htmlFor="elogio">Elogios</FaleconoscoLabel>
+              <FaleconoscoCheckbox id="outro" type="checkbox" />
+              <FaleconoscoLabel htmlFor="outro">Outro</FaleconoscoLabel><br />
             </FaleconoscoCheckboxes>
             <FaleconoscoTextarea 
               placeholder="Sua mensagem..." />
@@ -44,13 +44,13 @@ export default function FaleConosco() {
               {'Enviar mensagem >'}
             </FaleconoscoBotao>
           </FaleconoscoForm>
-        </FaleconoscoForm>
-        <div>
-          <img src={FaleConosco1} />
-        </div>
+        </FaleconoscoFormContainer>
+        <FaleconoscoFormContainer>
+          <FaleconoscoImg src={FaleConosco1} />
+        </FaleconoscoFormContainer>
       </FaleconoscoContainerTopo>
       <FaleconoscoContainerRodape>
-        <h3>Ajuda - FAQ</h3>
+        <FaleconoscoSubtitulo>Ajuda - FAQ</FaleconoscoSubtitulo>
         <FaleconoscoAjudaParagrafo>
           QUEM SOMOS<br />
           Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. 
@@ -78,6 +78,16 @@ const FaleconoscoContainerTopo = styled.div`
   display: flex;
   flex-direction: row;
 `;
+
+const FaleconoscoFormContainer = styled.div``;
+
+const FaleconoscoImg = styled.img``;
+
+const FaleconoscoSubtitulo = styled.h3``;
+
+const FaleconoscoCheckbox = styled.input``;
+
+const FaleconoscoLabel = styled.label``;
 
 const FaleconoscoForm = styled.form`
   width: 80%;
