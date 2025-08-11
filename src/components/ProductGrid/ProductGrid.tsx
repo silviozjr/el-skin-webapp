@@ -40,9 +40,8 @@ function ProductGrid() {
   }, [products.length, loadProducts]);
 
   useEffect(() => {
-    const textoBusca = term.toLowerCase();
     setProdutosFiltrados(
-      filteredProducts(textoBusca)
+      filteredProducts(term)
     )
   }, [term, filteredProducts]);
 
