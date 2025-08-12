@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import ProductCard, { IProduto } from "./ProductCard";
+import ProductCard from "./ProductCard";
+import { IProduto } from '../../store/api/apiSlice';
 
 const product: IProduto = {
   id: '1',

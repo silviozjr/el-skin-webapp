@@ -1,14 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-
-export interface IProduto {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  image: string;
-  tags: string[];
-}
+import { IProduto } from "../../store/api/apiSlice";
 
 interface ProductCardProps {
   product: IProduto,

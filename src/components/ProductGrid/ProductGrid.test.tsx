@@ -1,9 +1,9 @@
 import '@testing-library/jest-dom';
 import { act, render, screen } from '@testing-library/react';
 import ProductGrid from './ProductGrid';
-import { IProduto } from '../../services/productService';
+import { IProduto } from '../../store/api/apiSlice';
 
-const mockProducts = [
+const mockProducts: IProduto[] = [
   {
     id: '1',
     name: 'Produto 1',
@@ -23,11 +23,11 @@ const mockProducts = [
 ];
 
 // Mock dos serviços
-jest.mock('../../services/productService', () => ({
-  productService: {
-    getProducts: () => mockProducts,
-  },
-}));
+// jest.mock('../../services/productService', () => ({
+//   productService: {
+//     getProducts: () => mockProducts,
+//   },
+// }));
 
 // Mock do SearchContext para controlar o termo de busca
 const mockSearchTerm = '';
@@ -46,33 +46,30 @@ jest.mock('../../hooks/useCart', () => ({
   }),
 }));
 
-const mockProdutos: IProduto[] = [
-  {
-    id: '1',
-    name: 'Produto 1',
-    description: 'Produto 1 desc',
-    price: 9.99,
-    image: '',
-    tags: [],
-  },
-  {
-    id: '2',
-    name: 'Produto 2',
-    description: 'Produto 2 desc',
-    price: 7.77,
-    image: '',
-    tags: [],
-  },
-]
+// jest.mock('../../hooks/useProducts', () => ({
+//   useProducts: () => ({
+//     products: mockProdutos,
+//     loadProducts: jest.fn(), 
+//     getProductById: jest.fn(), 
+//     filteredProducts: () => mockProducts,
+//   }),
+// }));
 
-jest.mock('../../hooks/useProducts', () => ({
-  useProducts: () => ({
-    products: mockProdutos,
-    loadProducts: jest.fn(), 
-    getProductById: jest.fn(), 
-    filteredProducts: () => mockProducts,
-  }),
-}));
+const mockUseGetProductsQuery = {
+  isLoading: false,
+  error: '',
+  data: mockProducts,
+}
+
+const mockTriggerGetProduct = jest.fn();
+
+jest.mock('../../store/api/apiSlice', () => ({
+  useGetProductsQuery: () => mockUseGetProductsQuery,
+  useLazyGetProductByIdQuery: () => [
+    mockTriggerGetProduct,
+    { data: mockProducts[0] }
+  ]
+}))
 
 const renderWithAct = async () => {
   let component;

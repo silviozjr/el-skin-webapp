@@ -1,35 +1,35 @@
 import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useEffect, useState } from "react"
-import { carouselService } from "../../services/carouselService"
+// import { carouselService } from "../../services/carouselService"
 import styled, { keyframes } from "styled-components"
+import { useGetCarouselItemsQuery } from "../../store/api/apiSlice";
 
-interface ICarouselItem {
-  title: string;
-  subtitle: string;
-  description?: string;
-  coupon?: string;
-  discount?: string;
-  backgroundImage: string;
-}
 
 export default function Carousel() {
 
   const [idxCarousel, setIdxCarousel] = useState(0);
-  const [items, setItems] = useState<ICarouselItem[]>([]);
+  // const [items, setItems] = useState<ICarouselItem[]>([]);
+  const { data: items, isLoading, error } = useGetCarouselItemsQuery();
 
   function previousItem() {
+    if (!items) {
+      return
+    }
     setIdxCarousel((prevIdx) => (prevIdx === 0 ? items.length - 1 : prevIdx - 1));
   }
 
   function nextItem() {
+    if (!items) {
+      return
+    }
     setIdxCarousel((prevIdx) => (prevIdx === items.length - 1 ? 0 : prevIdx + 1));
   }
 
   useEffect(() => {
     const timer = setInterval(() => {
       setIdxCarousel(prevIdxItemAtual => {
-        return items.length > 0 ? (prevIdxItemAtual + 1) % items.length : 0;
+        return items && items.length > 0 ? (prevIdxItemAtual + 1) % items.length : 0;
       });
     }, 3000);
 
@@ -38,54 +38,59 @@ export default function Carousel() {
     };
   }, [items]);
 
-  useEffect(() => {
-    async function buscarItensCarousel() {
-      const newItems = await carouselService.getCarouselItems();
-      setItems(newItems);
-    }
+  // useEffect(() => {
+  //   async function buscarItensCarousel() {
+  //     const newItems = await carouselService.getCarouselItems();
+  //     setItems(newItems);
+  //   }
 
-    buscarItensCarousel();
-  }, []);
+  //   buscarItensCarousel();
+  // }, []);
 
   return (
-    items.length === 0 ? <></> : (
-    <CarouselSection
-      style={{
-        backgroundImage: `url(${items[idxCarousel].backgroundImage})`,
-      }}
-    >
-      <CarouselContainer
-        data-testid="carousel-container"
-      >
-        <CarouselContent>
-          <CarouselNavButton data-testid="button-previous" aria-label="Voltar" onClick={previousItem}>
-            <FontAwesomeIcon width="60" height="24" icon={faAngleLeft} style={{ color: 'white' }} />
-          </CarouselNavButton>
+    <>
+      {isLoading && <p>Carregando dados...</p>}
+      {error && <p>`Erro ao buscar dados: ${JSON.stringify(error)}`</p>}
 
-          <CarouselText>
-            {items[idxCarousel].subtitle && <CarouselSubtitle>{items[idxCarousel].subtitle}</CarouselSubtitle>}
-            {items[idxCarousel].title && <CarouselTitle>{items[idxCarousel].title}</CarouselTitle>}
-            {items[idxCarousel].description && <CarouselDescription>{items[idxCarousel].description}</CarouselDescription>}
-            {items[idxCarousel].discount && <CarouselDiscount>{items[idxCarousel].discount}</CarouselDiscount>}
-            {items[idxCarousel].coupon && (
-              <CarouselCouponContainer>
-                <CarouselCouponLabel>use o cupom</CarouselCouponLabel>
-                <CarouselCoupon>{items[idxCarousel].coupon}</CarouselCoupon>
-              </CarouselCouponContainer>
-            )}
-            <CarouselCtaButton>
-              comprar agora
-              <FontAwesomeIcon icon={faAngleRight} />
-            </CarouselCtaButton>
-          </CarouselText>
+      {!isLoading && !error && items && (
+        <CarouselSection
+          style={{
+            backgroundImage: `url(${items[idxCarousel].backgroundImage})`,
+          }}
+        >
+          <CarouselContainer
+            data-testid="carousel-container"
+          >
+            <CarouselContent>
+              <CarouselNavButton data-testid="button-previous" aria-label="Voltar" onClick={previousItem}>
+                <FontAwesomeIcon width="60" height="24" icon={faAngleLeft} style={{ color: 'white' }} />
+              </CarouselNavButton>
 
-          <CarouselNavButton data-testid="button-next" aria-label="Próximo" onClick={nextItem}>
-            <FontAwesomeIcon width="60" height="24" icon={faAngleRight} style={{ color: 'white' }} />
-          </CarouselNavButton>
-        </CarouselContent>
-      </CarouselContainer>
-    </CarouselSection>
-    )
+              <CarouselText>
+                {items[idxCarousel].subtitle && <CarouselSubtitle>{items[idxCarousel].subtitle}</CarouselSubtitle>}
+                {items[idxCarousel].title && <CarouselTitle>{items[idxCarousel].title}</CarouselTitle>}
+                {items[idxCarousel].description && <CarouselDescription>{items[idxCarousel].description}</CarouselDescription>}
+                {items[idxCarousel].discount && <CarouselDiscount>{items[idxCarousel].discount}</CarouselDiscount>}
+                {items[idxCarousel].coupon && (
+                  <CarouselCouponContainer>
+                    <CarouselCouponLabel>use o cupom</CarouselCouponLabel>
+                    <CarouselCoupon>{items[idxCarousel].coupon}</CarouselCoupon>
+                  </CarouselCouponContainer>
+                )}
+                <CarouselCtaButton>
+                  comprar agora
+                  <FontAwesomeIcon icon={faAngleRight} />
+                </CarouselCtaButton>
+              </CarouselText>
+
+              <CarouselNavButton data-testid="button-next" aria-label="Próximo" onClick={nextItem}>
+                <FontAwesomeIcon width="60" height="24" icon={faAngleRight} style={{ color: 'white' }} />
+              </CarouselNavButton>
+            </CarouselContent>
+          </CarouselContainer>
+        </CarouselSection>
+      )}
+    </>
   )
 }
 
@@ -173,7 +178,7 @@ const CarouselText = styled.div`
 const CarouselSubtitle = styled.span`
   display: block;
   font-size: 16px;
-  color: ${ props => props.theme.colors.primary };
+  color: ${props => props.theme.colors.primary};
   margin-bottom: 8px;
   font-weight: 400;
   letter-spacing: 0.5px;
@@ -185,7 +190,7 @@ const CarouselSubtitle = styled.span`
 const CarouselTitle = styled.h1`
   font-size: 64px;
   font-weight: 700;
-  color: ${ props => props.theme.colors.primary };
+  color: ${props => props.theme.colors.primary};
   margin: 0;
   margin-bottom: 16px;
   line-height: 1.1;
@@ -217,7 +222,7 @@ const CarouselDiscount = styled.span`
 `;
 
 const CarouselCtaButton = styled.button`
-  background: ${ props => props.theme.colors.primaryGradient };
+  background: ${props => props.theme.colors.primaryGradient};
   color: white;
   border: none;
   padding: 16px 32px;
@@ -233,7 +238,7 @@ const CarouselCtaButton = styled.button`
   text-transform: lowercase;
   
   &:hover {
-    background: ${ props => props.theme.colors.primaryGradientHover };
+    background: ${props => props.theme.colors.primaryGradientHover};
     transform: translateY(-2px);
     box-shadow: 0 8px 24px rgba(139, 74, 139, 0.4);
   }
@@ -255,14 +260,14 @@ const CarouselCouponContainer = styled.div`
 
 const CarouselCouponLabel = styled.p`
   font-size: 18px;
-  color: ${ props => props.theme.colors.secondary };
+  color: ${props => props.theme.colors.secondary};
   margin-bottom: 0.5rem;
   line-height: 1.5;
   max-width: 400px;
 `;
 
 const CarouselCoupon = styled.span`
-  border: 1px dashed ${ props => props.theme.colors.secondary };
+  border: 1px dashed ${props => props.theme.colors.secondary};
   padding: 0.5rem 1rem;
-  color: ${ props => props.theme.colors.secondary };
+  color: ${props => props.theme.colors.secondary};
 `;

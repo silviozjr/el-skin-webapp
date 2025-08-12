@@ -23,11 +23,21 @@ const mockItems = [
 ];
 
 // Mock dos serviços
-jest.mock('../../services/carouselService', () => ({
-  carouselService: {
-    getCarouselItems: () => mockItems,
-  },
-}));
+// jest.mock('../../services/carouselService', () => ({
+//   carouselService: {
+//     getCarouselItems: () => mockItems,
+//   },
+// }));
+
+const mockUseGetCarouselItemsQueryResult = {
+  isLoading: false,
+  error: '',
+  data: mockItems,
+}
+
+jest.mock('../../store/api/apiSlice', () => ({
+  useGetCarouselItemsQuery: () => mockUseGetCarouselItemsQueryResult,
+}))
 
 const renderWithAct = async () => {
   let component;

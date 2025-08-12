@@ -1,9 +1,10 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { useSearch } from "../../hooks/useSearch";
-import ProductCard, { IProduto } from "../ProductCard/ProductCard";
+import ProductCard from "../ProductCard/ProductCard";
 import { useCart } from "../../hooks/useCart";
-import { useProducts } from "../../hooks/useProducts";
+// import { useProducts } from "../../hooks/useProducts";
+import { useLazyGetProductByIdQuery, useGetProductsQuery, IProduto } from "../../store/api/apiSlice";
 
 
 
@@ -11,13 +12,19 @@ function ProductGrid() {
 
   const { term } = useSearch();
   const { addItem } = useCart();
-  const { products, loadProducts, getProductById, filteredProducts } = useProducts();
-  console.log('Products: ', products);
+  // const { products, loadProducts, getProductById, filteredProducts } = useProducts();
+  const { data: products = [], isLoading, error } = useGetProductsQuery();
+  const [
+    triggerGetProduct, 
+    { data: product }
+  ] = useLazyGetProductByIdQuery();
   const [produtosFiltrados, setProdutosFiltrados] = useState<IProduto[]>([])
 
-  const handleProductClick = (productId: string) => {
+  const handleProductClick = async (productId: string) => {
     console.log(`Produto clicado: ${productId}`);
-    console.log('getById:', getProductById(productId));
+
+    await triggerGetProduct(productId)
+    console.log('getById:', product);
   };
 
   const handleBuyClick = useCallback((productId: string, event: React.MouseEvent) => {
@@ -25,25 +32,34 @@ function ProductGrid() {
     console.log(`Comprar produto: ${productId}`);
     const produtoComprado = products.find(product => product.id === productId);
 
-    if(!produtoComprado) {
+    if (!produtoComprado) {
       console.error(`Produto com ID ${productId} não encontrado.`);
       return;
     }
 
     addItem(produtoComprado);
   }, [products, addItem]);
-  
-  useEffect(() => {
-    if (products.length === 0) {
-      loadProducts();
-    }
-  }, [products.length, loadProducts]);
+
+  // useEffect(() => {
+  //   if (products.length === 0) {
+  //     loadProducts();
+  //   }
+  // }, [products.length, loadProducts]);
+
+  // useEffect(() => {
+  //   setProdutosFiltrados(
+  //     filteredProducts(term)
+  //   )
+  // }, [term, filteredProducts]);
 
   useEffect(() => {
+    const textoBusca = term.toLowerCase();
     setProdutosFiltrados(
-      filteredProducts(term)
+      textoBusca && textoBusca.trim() !== "" 
+        ? products.filter(prod => prod.name.toLowerCase().includes(textoBusca) || prod.description.toLowerCase().includes(textoBusca))
+        : [...products]
     )
-  }, [term, filteredProducts]);
+  }, [term, products])
 
   return (
     <ProductGridSection>
@@ -51,14 +67,19 @@ function ProductGrid() {
         <ProductGridTitle>nossos queridinhos estão aqui</ProductGridTitle>
 
         <ProductCardsContainer>
-          {produtosFiltrados.map((produto) => (
-            <ProductCard 
-              key={produto.id} 
-              product={produto}
-              onProductClick={handleProductClick}
-              onBuyClick={handleBuyClick}
-            />
-          ))}
+          {isLoading && <p>Carregando produtos...</p>}
+          {error && <p>Erro ao carregar produtos: {JSON.stringify(error)}</p>}
+
+          {!isLoading && !error && (
+            produtosFiltrados.map((produto) => (
+              <ProductCard
+                key={produto.id}
+                product={produto}
+                onProductClick={handleProductClick}
+                onBuyClick={handleBuyClick}
+              />
+            ))
+          )}
         </ProductCardsContainer>
       </ProductGridContainer>
     </ProductGridSection>
