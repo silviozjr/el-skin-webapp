@@ -1,10 +1,9 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useMemo } from "react";
 import styled, { keyframes } from "styled-components";
+import { useCart } from "../../hooks/useCart";
 import { useSearch } from "../../hooks/useSearch";
 import ProductCard from "../ProductCard/ProductCard";
-import { useCart } from "../../hooks/useCart";
-// import { useProducts } from "../../hooks/useProducts";
-import { useLazyGetProductByIdQuery, useGetProductsQuery, IProduto } from "../../store/api/apiSlice";
+import { IProduto, useGetProductsQuery, useLazyGetProductByIdQuery } from "../../store/api/apiSlice";
 
 
 
@@ -12,13 +11,11 @@ function ProductGrid() {
 
   const { term } = useSearch();
   const { addItem } = useCart();
-  // const { products, loadProducts, getProductById, filteredProducts } = useProducts();
   const { data: products = [], isLoading, error } = useGetProductsQuery();
   const [
     triggerGetProduct, 
     { data: product }
   ] = useLazyGetProductByIdQuery();
-  const [produtosFiltrados, setProdutosFiltrados] = useState<IProduto[]>([])
 
   const handleProductClick = async (productId: string) => {
     console.log(`Produto clicado: ${productId}`);
@@ -40,26 +37,19 @@ function ProductGrid() {
     addItem(produtoComprado);
   }, [products, addItem]);
 
-  // useEffect(() => {
-  //   if (products.length === 0) {
-  //     loadProducts();
-  //   }
-  // }, [products.length, loadProducts]);
-
-  // useEffect(() => {
-  //   setProdutosFiltrados(
-  //     filteredProducts(term)
-  //   )
-  // }, [term, filteredProducts]);
-
-  useEffect(() => {
-    const textoBusca = term.toLowerCase();
-    setProdutosFiltrados(
-      textoBusca && textoBusca.trim() !== "" 
-        ? products.filter(prod => prod.name.toLowerCase().includes(textoBusca) || prod.description.toLowerCase().includes(textoBusca))
-        : [...products]
-    )
-  }, [term, products])
+  const produtosFiltrados: IProduto[] = useMemo(() => {
+    if (!products) {
+      return [];
+    }
+    const textoBusca = term.toLowerCase().trim();
+    if (textoBusca === "") {
+      return products; // Retorna todos os produtos se a busca estiver vazia
+    }
+    return products.filter(prod =>
+      prod.name.toLowerCase().includes(textoBusca) ||
+      prod.description.toLowerCase().includes(textoBusca)
+    );
+  }, [term, products]);
 
   return (
     <ProductGridSection>
@@ -123,14 +113,16 @@ const ProductCardsContainer = styled.div`
   justify-items: center;
 
   
-  &:nth-child(1) { animation: ${fadeInUp} 0.5s ease-out 0.1s forwards; }
-  &:nth-child(2) { animation: ${fadeInUp} 0.5s ease-out 0.2s forwards; }
-  &:nth-child(3) { animation: ${fadeInUp} 0.5s ease-out 0.3s forwards; }
-  &:nth-child(4) { animation: ${fadeInUp} 0.5s ease-out 0.4s forwards; }
-  &:nth-child(5) { animation: ${fadeInUp} 0.5s ease-out 0.5s forwards; }
-  &:nth-child(6) { animation: ${fadeInUp} 0.5s ease-out 0.6s forwards; }
-  &:nth-child(7) { animation: ${fadeInUp} 0.5s ease-out 0.7s forwards; }
-  &:nth-child(8) { animation: ${fadeInUp} 0.5s ease-out 0.8s forwards; }
+  & > * {
+    opacity: 0;
+    animation: ${fadeInUp} 0.5s ease-out forwards;
+  }
+
+  ${Array.from({ length: 8 }).map((_, i) => `
+    & > *:nth-child(${i + 1}) {
+      animation-delay: ${0.1 * (i + 1)}s;
+    }
+  `)}
 `;
 
 export default ProductGrid;
