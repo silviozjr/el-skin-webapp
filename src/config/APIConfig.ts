@@ -1,6 +1,6 @@
 // Configurações da API
 export const API_CONFIG = {
-  BASE_URL: process.env.REACT_APP_API_URL || 'http://localhost:3001',
+  BASE_URL: process.env.REACT_APP_API_URL || 'http://localhost:3000/api',
   TIMEOUT: parseInt(process.env.API_TIMEOUT || '') || 10000,
   
   // Endpoints
