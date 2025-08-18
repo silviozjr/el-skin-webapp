@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './styles.module.css'; // Assuming you have a CSS module for styles
 import About1 from '../../assets/sobre1.png';
+import Link from 'next/link';
 
 const About: React.FC = () => {
   return (
@@ -62,7 +63,11 @@ const About: React.FC = () => {
 
         <button className={styles.contact_button}>
           <span className={styles.contact_icon}>💬</span>
-          <span>Fale conosco</span>
+          <span>
+            <Link className={styles.contact_link} href="/fale-conosco">
+              Fale conosco
+            </Link>
+          </span>
         </button>
       </div>
     </div>

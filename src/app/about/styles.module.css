@@ -113,6 +113,11 @@
   font-size: 1.2rem;
 }
 
+.contact_link {
+  text-decoration: none;
+  color: white;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .about_container {
