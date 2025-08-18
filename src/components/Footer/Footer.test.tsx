@@ -1,6 +1,5 @@
 import { render, screen } from '@testing-library/react';
 import Footer from './Footer';
-import { BrowserRouter as Router } from 'react-router-dom';
 
 describe('Footer Component', () => {
   let consoleWarnSpy: jest.SpyInstance;
@@ -17,9 +16,7 @@ describe('Footer Component', () => {
 
   test('componente Sobre deve ser renderizado', () => {
     render(
-      <Router>
-        <Footer />
-      </Router>
+      <Footer />
     );
     expect(screen.getByText('2025 AL SKIN. Todos os direitos reservados.')).toBeInTheDocument();
   });
@@ -28,9 +25,7 @@ describe('Footer Component', () => {
     const consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => undefined);
 
     render(
-      <Router>
-        <Footer />
-      </Router>
+      <Footer />
     );
 
     const link = screen.getByTestId('footer-button-0')
